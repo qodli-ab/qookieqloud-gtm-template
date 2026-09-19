@@ -68,11 +68,7 @@ if (data.enableGcmv2) {
 
 const loaderUrl = data.cdnUrl || 'https://cf-cdn.qookieqloud.com/consentLoader.js';
 
-injectScript(loaderUrl, () => {
-  data.gtmOnSuccess();
-}, () => {
-  data.gtmOnFailure();
-});
+injectScript(loaderUrl, data.gtmOnSuccess, data.gtmOnFailure);
 
 
 ___WEB_PERMISSIONS___
