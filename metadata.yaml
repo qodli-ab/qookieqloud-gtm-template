@@ -1,5 +1,5 @@
 homepage: "https://qookieqloud.com"
 documentation: "https://qookieqloud.com/helpdesk/google-consent-mode-v2"
 versions:
-  - sha: "HEAD"
+  - sha: "a077aaee40118c3560957f207715b2b60aa5a1e2"
     changeNotes: "Initial release of QookieQloud CMP with Google Consent Mode v2 support."
