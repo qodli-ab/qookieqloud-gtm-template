@@ -33,6 +33,13 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
+    "type": "TEXT",
+    "name": "siteKey",
+    "displayName": "QookieQloud Site Key",
+    "simpleValueType": true,
+    "help": "Optional for existing API v1 installations. Add the public Site Key generated for this domain to use API v2."
+  },
+  {
     "type": "CHECKBOX",
     "name": "enableGcmv2",
     "checkboxText": "Enable Google Consent Mode v2 Default States",
@@ -45,8 +52,8 @@ ___TEMPLATE_PARAMETERS___
     "name": "cdnUrl",
     "displayName": "Custom CDN Loader URL (Optional)",
     "simpleValueType": true,
-    "defaultValue": "https://cf-cdn.qookieqloud.com/consentLoader.js",
-    "help": "Optional custom URL for QookieQloud consentLoader.js. Defaults to https://cf-cdn.qookieqloud.com/consentLoader.js."
+    "defaultValue": "",
+    "help": "Optional custom loader URL. If empty, the template selects the v2 loader when a Site Key is provided and the v1 loader otherwise."
   }
 ]
 
@@ -66,9 +73,23 @@ if (data.enableGcmv2) {
   });
 }
 
-const loaderUrl = data.cdnUrl || 'https://cf-cdn.qookieqloud.com/consentLoader.js';
+const siteKey = data.siteKey || '';
+if (siteKey && !/^qq_pk_[a-f0-9]{64}$/.test(siteKey)) {
+  data.gtmOnFailure();
+  return;
+}
 
-injectScript(loaderUrl, data.gtmOnSuccess, data.gtmOnFailure);
+const loaderUrl = data.cdnUrl || (siteKey
+  ? 'https://cf-cdn.qookieqloud.com/v2/consentLoader.js'
+  : 'https://cf-cdn.qookieqloud.com/consentLoader.js');
+if (!siteKey) {
+  injectScript(loaderUrl, data.gtmOnSuccess, data.gtmOnFailure);
+  return;
+}
+const separator = loaderUrl.indexOf('?') === -1 ? '?' : '&';
+const scriptUrl = loaderUrl + separator + 'site_key=' + encodeURIComponent(siteKey);
+
+injectScript(scriptUrl, data.gtmOnSuccess, data.gtmOnFailure);
 
 
 ___WEB_PERMISSIONS___
