@@ -170,10 +170,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const injectScript = require('injectScript');
 const setDefaultConsentState = require('setDefaultConsentState');
-const setDeveloperId = require('setDeveloperId');
-
-// Set Developer ID for Google Tag Manager template gallery submission
-setDeveloperId('dNWFlZT');
+const encodeUriComponent = require('encodeUriComponent');
 
 const parseRegions = function(regionStr) {
   if (!regionStr) return null;
@@ -218,7 +215,14 @@ if (data.enableGcmv2) {
 }
 
 const siteKey = data.siteKey || '';
-if (siteKey && !/^qq_pk_[a-f0-9]{64}$/.test(siteKey)) {
+const isValidSiteKey = function(key) {
+  if (!key) return true;
+  if (key.indexOf('qq_pk_') !== 0) return false;
+  if (key.length !== 70) return false;
+  return true;
+};
+
+if (siteKey && !isValidSiteKey(siteKey)) {
   data.gtmOnFailure();
   return;
 }
@@ -231,7 +235,7 @@ if (!siteKey) {
   return;
 }
 const separator = loaderUrl.indexOf('?') === -1 ? '?' : '&';
-const scriptUrl = loaderUrl + separator + 'site_key=' + encodeURIComponent(siteKey);
+const scriptUrl = loaderUrl + separator + 'site_key=' + encodeUriComponent(siteKey);
 
 injectScript(scriptUrl, data.gtmOnSuccess, data.gtmOnFailure);
 
@@ -239,32 +243,6 @@ injectScript(scriptUrl, data.gtmOnSuccess, data.gtmOnFailure);
 ___WEB_PERMISSIONS___
 
 [
-  {
-    "instance": {
-      "key": {
-        "publicId": "set_developer_id",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "developerIds",
-          "value": {
-            "type": 2,
-            "listItem": [
-              {
-                "type": 1,
-                "string": "dNWFlZT"
-              }
-            ]
-          }
-        }
-      ]
-    },
-    "clientAnnotations": {
-      "isEditedByUser": false
-    },
-    "isRequired": true
-  },
   {
     "instance": {
       "key": {
