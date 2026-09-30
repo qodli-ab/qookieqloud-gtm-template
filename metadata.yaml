@@ -1,11 +1,5 @@
 homepage: "https://qookieqloud.com"
 documentation: "https://qookieqloud.com/helpdesk/google-consent-mode-v2"
 versions:
-  - sha: "ec7ecfa759cfb94a76be48bd32cbfe9a11cbd1ea"
-    changeNotes: "feat(gtm): add developerId and regional default consent settings
-
-    - Add developerId to INFO metadata block for GTM Gallery compliance
-    - Add regionSettings PARAM_TABLE for ISO 3166-2 regional default states
-    - Parse and apply regional consent rules via setDefaultConsentState
-    - Replace regex literal with string check for GTM Sandboxed JS compatibility
-    - Require encodeUriComponent module for query parameter encoding"
+  - sha: "8bfc4fd7e8e3bf2ed8b55d771312547e33497b68"
+    changeNotes: "Remove obsolete CDN permission from GTM template"
