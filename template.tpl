@@ -404,10 +404,6 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "https://cf-cdn.qookieqloud.com/*"
-              },
-              {
-                "type": 1,
-                "string": "https://cdn.qookieqloud.com/*"
               }
             ]
           }
