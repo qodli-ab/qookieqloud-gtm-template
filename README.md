@@ -29,7 +29,7 @@ callback before loading the CMP. The banner calls it before emitting
 `consent_update`, including saved choices, GPC restrictions and withdrawals.
 A late template registration replays the banner's latest state.
 
-The template requires write access to `__qqGtmConsentUpdate` and execute access
+The template requires read and write access to `__qqGtmConsentUpdate` and execute access
 to `__qqSyncGtmConsent`. Without the new template, the banner retains its gtag
 update path. Older banners also retain their existing behavior.
 
