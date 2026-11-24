@@ -170,6 +170,9 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const injectScript = require('injectScript');
 const setDefaultConsentState = require('setDefaultConsentState');
+const updateConsentState = require('updateConsentState');
+const setInWindow = require('setInWindow');
+const callInWindow = require('callInWindow');
 const encodeUriComponent = require('encodeUriComponent');
 
 const parseRegions = function(regionStr) {
@@ -225,6 +228,21 @@ const isValidSiteKey = function(key) {
 if (siteKey && !isValidSiteKey(siteKey)) {
   data.gtmOnFailure();
   return;
+}
+
+// Native updates must reach GTM before the banner emits consent_update.
+// Register before injection; replay a current choice if the banner already ran.
+if (data.enableGcmv2) {
+  setInWindow('__qqGtmConsentUpdate', function(states) {
+    updateConsentState({
+      ad_storage: states.ad_storage,
+      analytics_storage: states.analytics_storage,
+      ad_user_data: states.ad_user_data,
+      ad_personalization: states.ad_personalization
+    });
+    return true;
+  }, true);
+  callInWindow('__qqSyncGtmConsent');
 }
 
 const loaderUrl = data.cdnUrl || (siteKey
@@ -404,6 +422,106 @@ ___WEB_PERMISSIONS___
               {
                 "type": 1,
                 "string": "https://cf-cdn.qookieqloud.com/*"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": false
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "access_globals",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "keys",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "__qqGtmConsentUpdate"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  }
+                ]
+              },
+              {
+                "type": 3,
+                "mapKey": [
+                  {
+                    "type": 1,
+                    "string": "key"
+                  },
+                  {
+                    "type": 1,
+                    "string": "read"
+                  },
+                  {
+                    "type": 1,
+                    "string": "write"
+                  },
+                  {
+                    "type": 1,
+                    "string": "execute"
+                  }
+                ],
+                "mapValue": [
+                  {
+                    "type": 1,
+                    "string": "__qqSyncGtmConsent"
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  }
+                ]
               }
             ]
           }

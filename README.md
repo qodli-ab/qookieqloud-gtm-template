@@ -21,3 +21,20 @@ Enter the public Site Key generated for the domain in QookieQloud to use API v2.
 ## License
 
 Apache License 2.0. See [LICENSE](LICENSE) for details.
+
+## Native consent updates
+
+With the updated banner, this template registers a native `updateConsentState`
+callback before loading the CMP. The banner calls it before emitting
+`consent_update`, including saved choices, GPC restrictions and withdrawals.
+A late template registration replays the banner's latest state.
+
+The template requires write access to `__qqGtmConsentUpdate` and execute access
+to `__qqSyncGtmConsent`. Without the new template, the banner retains its gtag
+update path. Older banners also retain their existing behavior.
+
+Before releasing, import the template into a test workspace and check its
+Consent Initialization trigger and updates in Tag Assistant. Automated local
+API simulations do not replace GTM import validation. Update `metadata.yaml`
+with the actual release commit SHA after committing; the existing entry is not
+advanced by this source change.
