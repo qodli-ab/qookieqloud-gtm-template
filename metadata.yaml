@@ -1,5 +1,5 @@
 homepage: "https://qookieqloud.com"
 documentation: "https://qookieqloud.com/helpdesk/google-consent-mode-v2"
 versions:
-  - sha: "8bfc4fd7e8e3bf2ed8b55d771312547e33497b68"
-    changeNotes: "Remove obsolete CDN permission from GTM template"
+  - sha: "4c715049747fafeb787b58dc93a14ac67a8fe647"
+    changeNotes: "feat: bridge banner consent changes to GTM updateConsentState"
